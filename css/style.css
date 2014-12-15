@@ -40,8 +40,8 @@ a:hover {
     line-height: 18px; 
     padding: 3px 5px;
 }
-.over18 {
-    color: #f99;
+.restricted {
+    
 }
 
 .navbox ul li a {

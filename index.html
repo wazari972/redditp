@@ -2,24 +2,13 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <title>redditP</title>
-    <meta name="description" content="A fullscreen presentation or slide show of reddit. RedditP" />
-    <link rel="shortcut icon" href="/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.touchwipe.js"></script>
-    <script type="text/javascript" src="/js/script.js"></script>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-4533496-15']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+    <title>WebAlbums slideshow</title>
+    <meta name="description" content="A fullscreen presentation or slide show of WebAlbums albums and tags." />
+    <link rel="shortcut icon" href="images/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script type="text/javascript" src="/WebAlbums3.5-dev/static/scripts/lib/jquery/js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.touchwipe.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
 </head>
 <body>
     <div class="prevArrow fadeOnIdle" title="The arrow keys work too" id="prevButton"></div>
@@ -32,12 +21,12 @@
                 <li id="subredditUrl"><noscript>No javascript, no gain.</noscript>
                 </li>
                 <li>
-                    <a href="https://github.com/ubershmekel/redditp/blob/master/README.md" title="hotkeys">hotkeys</a> -
+                    <a title="* a - toggles auto-next (play/pause)&#013;* t - collapse/uncollapse title&#013;* c - collapse/uncollapse controls&#013;* Arrow keys, pgup/pgdown, spacebar change slides&#013;* Swipe gestures on phones">hotkeys</a> -
                     <a href="https://github.com/ubershmekel/redditp" title="redditp source on github">src</a> -
                     <a href="http://www.reddit.com/r/redditp" title="who made this">blog</a>
                 </li>
                 <li>
-                    <input class="checkbox" type="checkbox" name="nsfw" id="nsfw" value="Auto" checked="true" /><label class="checkbox over18" for="nsfw"> nsfw</label>
+                    <input class="checkbox" type="checkbox" name="restricted" id="restricted" value="Auto" checked="true" /><label class="checkbox restricted" for="restricted">restricted</label>
                 </li>
             </ul>
             <ul class="nbmenu">
@@ -46,17 +35,17 @@
                     every <input type="text" name="timeToNextSlide" id="timeToNextSlide" value="5" size="2" /> seconds
                 </li>
                 <li>
-                    <a id='navboxCommentsLink' href='#' title='Comments on reddit'>comments</a>
+                    <a id='navboxEditLink' target="_blank" href='#' title='Edit'>edit</a>
                 </li>
                 <li>
-                    <a id='navboxLink' href='#' title='placeholder'>image</a>
+                    <a id='navboxLink' href='#' target="_blank" title='placeholder'>image</a>
                 </li>
             </ul>
             <div class="numberButtonList">
                 <ul id="allNumberButtons">
                 <!-- Slide number buttons will be injected by jQuery -->
                 </ul>
-                <ul id="sfwNumberButtons">
+                <ul id="restrictedNumberButtons">
                 </ul>
             </div>
         </div>
@@ -67,37 +56,6 @@
             <noscript>Javascript is required for redditp to work :(</noscript>
         </h2>
     </div>        
-
-    <div id="recommend" style="display:none; text-align: center; margin: 10px; color: rgb(170, 170, 170);">
-        <p>Maybe try these presentations instead:</p>
-        <ul>
-            <li>
-                <a href="/r/earthporn">earthporn</a>
-            </li>
-            <li>
-                <a href="/r/aww">aww</a>
-            </li>
-            <li>
-                <a href="/r/foodporn">foodporn</a>
-            </li>
-            <li>
-                <a href="/r/funny">funny</a>
-            </li>
-            <li>
-                <a href="/r/gonewild">gonewild</a>
-            </li>
-            <li>
-                <a href="/r/spaceporn">spaceporn</a>
-            </li>
-            <li>
-                <a href="/r/gifs">gifs</a>
-            </li>
-            <li>
-                <a href="/r/all">all</a>
-            </li>
-        </ul>    
-    </div>
-    
     
     <div id="pictureSlider">
         <!-- Pictures will be injected by jQuery -->
@@ -105,17 +63,5 @@
             <!-- Empty div to be animated out, do not erase -->
         </div>
     </div>
-
-<script type="text/javascript">
-    window._idl = {};
-    _idl.variant = "modal";
-    (function() {
-        var idl = document.createElement('script');
-        idl.type = 'text/javascript';
-        idl.async = true;
-        idl.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'members.internetdefenseleague.org/include/?url=' + (_idl.url || '') + '&campaign=' + (_idl.campaign || '') + '&variant=' + (_idl.variant || 'banner');
-        document.getElementsByTagName('body')[0].appendChild(idl);
-    })();
-</script>
 </body>
 </html>

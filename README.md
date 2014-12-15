@@ -3,6 +3,8 @@ redditp
 
 A full screen reddit presentation or slide show.
 
+--> adapted to show WebAlbums albums instead of reddit
+
 http://redditp.com
 
 Hotkeys
@@ -29,3 +31,4 @@ Possible future features, depending on feedback:
 * Offline access support, though I don't know if this is even possible actually (caching external image resources).
 
 Made by Ubershmekel http://uberpython.wordpress.com/
+Adapted by Kevin Pouget
