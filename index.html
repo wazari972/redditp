@@ -13,6 +13,21 @@
     <link rel="shortcut icon" href="/images/favicon.png" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.css" />
+
+    <!-- Google error reporting -->
+    <script defer src="https://cdn.rawgit.com/GoogleCloudPlatform/stackdriver-errors-js/v0.3.0/dist/stackdriver-errors-concat.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('DOMContentLoaded', function() {
+            var errorHandler = new StackdriverErrorReporter();
+            errorHandler.start({
+                key: 'AIzaSyDjQxNRa6NQ21ibUHBdSKNkcgVmhidcyzE',
+                projectId: 'ubershmekel',
+                service: 'redditp',
+                version: '0.1.0',
+            });
+        });
+    </script>
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js"></script>
     <script>
@@ -29,6 +44,8 @@
             // Tell users when errors occur and log on google analytics
             // http://stackoverflow.com/questions/2604976/javascript-how-to-display-script-errors-in-a-popup-alert/2604997#2604997
             var errMessage = msg + '\nURL: ' + url + '\nLine Number: '+ linenumber;
+            if (console && console.log)
+                console.log(errMessage);
             ga('send', 'exception', {
                 'exDescription': errMessage,
                 'exFatal': false
@@ -46,8 +63,8 @@
     <script type="text/javascript" src="/js/jquery.touchwipe.js"></script>
     <script type="text/javascript" src="/js/js.cookie.js"></script>
     <script type="text/javascript" src="/js/ie_hacks.js"></script>
-    <script type="text/javascript" src="/js/EmbedIt.js"></script>
-    <script type="text/javascript" src="/js/script.js"></script>
+    <script type="text/javascript" src="/js/EmbedIt.js?nocache=123"></script>
+    <script type="text/javascript" src="/js/script.js?nocache=123"></script>
 </head>
 <body id="page">
     <div class="prevArrow fadeOnIdle" title="The arrow keys work too" id="prevButton"></div>

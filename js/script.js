@@ -46,6 +46,15 @@ rp.photos = [];
 // maybe checkout http://engineeredweb.com/blog/09/12/preloading-images-jquery-and-javascript/ for implementing the old precache
 rp.cache = {};
 
+function reportError(errMessage) {
+    if (window.errorHandler && window.errorHandler.report) {
+        window.errorHandler.report(new Error(errMessage));
+    } else {
+        console.log('No error handler yet:' + errMessage);
+    }
+    toastr.error(errMessage + ', please alert ubershmekel on <a href="https://github.com/ubershmekel/redditp/issues">github</a>');    
+}
+
 
 $(function () {
 
@@ -519,7 +528,12 @@ $(function () {
 
     var playButton = $('<img id="playButton" src="/images/play.svg" />');
     playButton.click(function() {
-        $('video')[0].play();
+        if ($('video')[0]) {
+            $('video')[0].play();
+        } else {
+            // serious bug, why did we show the play button but have no video there?
+            reportError('Play button pressed but no video there');
+        }
         playButton.hide();
     });
     $(pictureSliderId).append(playButton);
@@ -611,14 +625,22 @@ $(function () {
             
         } else if(photo.type === imageTypes.gfycat || photo.type === imageTypes.gifv) {
             embedit.embed(photo.url, function(elem) {
+                if (!elem) {
+                    reportError('Failed to handle url');
+                    return divNode;
+                }
                 divNode.append(elem);
+                $(elem).attr({
+                    muted: '',
+                    playsinline: '',
+                });
                 elem.width('100%').height('100%');
                 // We start paused and play after the fade in.
                 // This is to avoid cached or preloaded videos from playing.
                 elem[0].pause();
             });
         } else {
-            toastr.error('Unhandled image type, please alert ubershmekel on <a href="https://github.com/ubershmekel/redditp/issues">github</a>');
+            reportError('Unhandled image type');
         }
         
         return divNode;
@@ -695,7 +717,7 @@ $(function () {
         // .htaccess
         // This is a good idea so we can give a quick 404 page when appropriate.
         
-        var regexS = "(/(?:(?:r/)|(?:imgur/a/)|(?:user/)|(?:domain/)|(?:search))[^&#?]*)[?]?(.*)";
+        var regexS = "(/(?:(?:r/)|(?:imgur/a/)|(?:u(?:ser)?/)|(?:domain/)|(?:search))[^&#?]*)[?]?(.*)";
         var regex = new RegExp(regexS);
         var results = regex.exec(window.location.href);
         //log(results);
@@ -729,7 +751,12 @@ $(function () {
 
         var jsonUrl = rp.redditBaseUrl + rp.subredditUrl + ".json?jsonp=?" + rp.session.after + "&" + getVars;
         var failedAjax = function (data) {
-            toastr.error("Failed ajax, maybe a bad url? Sorry about that :(");
+            var message = "Failed ajax, maybe a bad url? Sorry about that :(";
+            var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+            if (isFirefox) {
+                message = "Failed ajax, Firefox try to disable tracking protection from the shield in the URL bar";
+            }
+            reportError(message);
             failCleanup();
         };
         var handleData = function (data) {
@@ -739,14 +766,18 @@ $(function () {
             rp.session.after = "&after=" + data.data.after;
 
             if (data.data.children.length === 0) {
-                toastr.error("No data from this url :(");
+                reportError("No data from this url :(");
                 return;
             }
 
             $.each(data.data.children, function (i, item) {
+                // `item.data.link_url` seems to be an item for reddit images
+                // or maybe the api change for user pages?
+                // First saw it at `https://redditp.com/u/doherty99` in the permalink:
+                // "https://www.reddit.com/r/gonewild/comments/7h7srj/pull_my_hair_and_fuck_me_from_behind/"
                 addImageSlide({
-                    url: item.data.url,
-                    title: item.data.title,
+                    url: item.data.url || item.data.link_url,
+                    title: item.data.title || item.data.link_title,
                     over18: item.data.over_18,
                     subreddit: item.data.subreddit,
                     commentsLink: rp.redditBaseUrl + item.data.permalink
@@ -758,7 +789,7 @@ $(function () {
             if (!rp.session.foundOneImage) {
                 // Note: the jsonp url may seem malformed but jquery fixes it.
                 //log(jsonUrl);
-                toastr.error("Sorry, no displayable images found in that url :(");
+                reportError("Sorry, no displayable images found in that url :(");
             }
 
             // show the first image
@@ -797,7 +828,7 @@ $(function () {
         var jsonUrl = 'https://api.imgur.com/3/album/' + albumID;
         //log(jsonUrl);
         var failedAjax = function (data) {
-            toastr.error("Failed ajax, maybe a bad url? Sorry about that :(");
+            reportError("Failed ajax, maybe a bad url? Sorry about that :(");
             failCleanup();
         };
         var handleData = function (data) {
@@ -805,7 +836,7 @@ $(function () {
             //log(data);
 
             if (data.data.images.length === 0) {
-                toastr.error("No data from this url :(");
+                reportError("No data from this url :(");
                 return;
             }
 
@@ -822,7 +853,7 @@ $(function () {
 
             if (!rp.session.foundOneImage) {
                 log(jsonUrl);
-                toastr.error("Sorry, no displayable images found in that url :(");
+                reportError("Sorry, no displayable images found in that url :(");
             }
 
             // show the first image
